@@ -1,0 +1,33 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "random-collection",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "b",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "random-collection",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "a",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "b",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+</head>
+
+<body>
+  <div id="message">
+    <h2>Welcome</h2>
+  </div>
+  <p id="load">Firebase SDK Loading&hellip;</p>
+
+  <input type="button" value="Create sample docs" id="createSampleDocsButton">
+  <input type="button" value="get doc: __name__ asc" id="getDocAscButton">
+  <input type="button" value="get doc: __name__ desc" id="getDocDescButton">
+
+  <pre>
+      <code id="queryDataText"></code>
+  </pre>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadEl = document.querySelector('#load');
+      try {
+        const firebaseConfig = {
+          // TODO: Add your firebase config here
+        }
+        let app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        let features = [
+          'firestore',
+        ].filter(feature => typeof app[feature] === 'function');
+        loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+
+        const queryDataText = document.getElementById("queryDataText")
+
+        const createSampleDocsButton = document.getElementById("createSampleDocsButton")
+        createSampleDocsButton.onclick = async () => {
+          const batch = db.batch();
+          const sampleColRef = db.collection("random-collection")
+          batch.set(sampleColRef.doc("doc-00"), { a: "1", b: "2" });
+          batch.set(sampleColRef.doc("doc-01"), { a: "1", b: "2" });
+          try {
+            await batch.commit()
+            alert("Docs created")
+          } catch (error) {
+            alert("Error creating docs, check console logs")
+            console.error(e)
+          }
+        }
+
+        const getDocAscButton = document.getElementById("getDocAscButton")
+        getDocAscButton.onclick = async () => {
+          const citiesRef = db.collectionGroup('random-collection');
+          const q = citiesRef.orderBy("a", "asc").orderBy("b", "desc").orderBy("__name__", "asc");
+          const docs = await q.get()
+          let queryData = []
+          docs.forEach((doc) => {
+            queryData.push({
+              docId: doc.id,
+              docData: doc.data()
+            })
+          })
+
+          queryDataText.innerHTML = JSON.stringify(queryData, null, 4)
+        }
+
+        const getDocDescButton = document.getElementById("getDocDescButton")
+        getDocDescButton.onclick = async () => {
+          const citiesRef = db.collectionGroup('random-collection');
+          const q = citiesRef.orderBy("a", "asc").orderBy("b", "desc").orderBy("__name__", "desc");
+          const docs = await q.get()
+          let queryData = []
+          docs.forEach((doc) => {
+            queryData.push({
+              docId: doc.id,
+              docData: doc.data()
+            })
+          })
+
+          queryDataText.innerHTML = JSON.stringify(queryData, null, 4)
+        }
+      } catch (e) {
+        console.error(e);
+        loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+      }
+    });
+  </script>
+</body>
+
+</html>
