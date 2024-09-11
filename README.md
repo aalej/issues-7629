@@ -105,5 +105,5 @@ Deploying the Firestore indexes results in only 1 of the 2 indexes to be created
    <img src="./images/firestore-console-indexes-1.png" alt="indexes" width="1024"/>
 4. Open http://127.0.0.1:5000
 5. Click `get doc: __name__ asc` button
-6. Open console logs, and open the link to create the query index
+6. Open console logs:
    - Raises as error because the query index containig the field index `__name__` Ascending is missing
